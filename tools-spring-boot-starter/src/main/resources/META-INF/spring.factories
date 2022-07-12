@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.zm.config.ToolsAutoConfiguration
+  com.zm.config.ToolsAutoConfiguration, \
+  com.zm.properties.ToolsProperties

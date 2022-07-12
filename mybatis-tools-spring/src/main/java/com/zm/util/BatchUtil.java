@@ -7,12 +7,14 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
 import org.mybatis.spring.SqlSessionUtils;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.function.ToIntBiFunction;
 
 import static org.mybatis.spring.SqlSessionUtils.closeSqlSession;
 
 /**
+ * 批量插入或更新的工具类
+ *
  * @author ming
  * @date 2022/7/9 19:40
  */
@@ -30,11 +32,24 @@ public class BatchUtil {
         batchSessionFactory = new DefaultSqlSessionFactory(configuration);
     }
 
-    public <T, U> int batchSave(List<T> list, Class<U> mapperClazz, ToIntBiFunction<U, T> func) {
+    /**
+     * @param list        要批量插入的数据集合
+     * @param mapperClazz 实体类对应的mapper类
+     * @param func        插入单条数据时的方法
+     * @return 插入条数
+     */
+    public <T, U> int batchSave(Collection<T> list, Class<U> mapperClazz, ToIntBiFunction<U, T> func) {
         return batchSave(list, mapperClazz, func, DEFAULT_LIMIT);
     }
 
-    public <T, U> int batchSave(List<T> list, Class<U> mapperClazz, ToIntBiFunction<U, T> func, int limit) {
+    /**
+     * @param list        要批量插入的数据集合
+     * @param mapperClazz 实体类对应的mapper类
+     * @param func        插入单条数据时的方法
+     * @param limit       单次批量提交的最大条数
+     * @return 插入条数
+     */
+    public <T, U> int batchSave(Collection<T> list, Class<U> mapperClazz, ToIntBiFunction<U, T> func, int limit) {
         if (list == null || list.isEmpty()) {
             return 0;
         }
