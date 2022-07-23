@@ -1,18 +1,17 @@
 package com.zm.annotation;
 
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import static java.lang.annotation.ElementType.FIELD;
-
 /**
- * 插入时为有该注解的自动设置当前时间
+ * 具有该注解的实体类将会在启动的时候进行扫描
  *
  * @author ming
- * @date 2022/7/10 18:29
+ * @date 2022/7/20 21:29
  */
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Target(value = FIELD)
-public @interface CreatedDate {
+public @interface EntityHandler {
 }
