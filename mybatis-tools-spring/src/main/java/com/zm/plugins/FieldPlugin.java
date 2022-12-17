@@ -37,7 +37,7 @@ import static com.zm.enums.ValueType.*;
 @Intercepts(@Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class}))
 public class FieldPlugin implements Interceptor {
 
-    private final static String COLLECTION = "collection";
+    private static final String COLLECTION = "collection";
     private final LoginUser loginUser;
     private final Map<Class<? extends CustomizeProvider>, CustomizeProvider> customizeProviderMap;
     private final Map<Class<?>, List<FieldInfo>> scanEntity;

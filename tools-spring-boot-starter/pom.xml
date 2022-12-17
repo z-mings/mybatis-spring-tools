@@ -5,7 +5,7 @@
     <parent>
         <artifactId>mybatis-tools</artifactId>
         <groupId>com.zm</groupId>
-        <version>0.0.2</version>
+        <version>0.0.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -27,7 +27,7 @@
         <dependency>
             <groupId>com.zm</groupId>
             <artifactId>mybatis-tools-spring</artifactId>
-            <version>0.0.2</version>
+            <version>0.0.3</version>
         </dependency>
     </dependencies>
 </project>

@@ -1,14 +1,15 @@
 package com.zm.config;
 
+import com.zm.batch.BatchUpdate;
 import com.zm.interfaces.CustomizeProvider;
 import com.zm.interfaces.LoginUser;
 import com.zm.interfaces.ScanEntityService;
 import com.zm.plugins.FieldPlugin;
 import com.zm.scan.EntityScanHandler;
-import com.zm.util.BatchUtil;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
-import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -28,8 +29,9 @@ public class ToolsAutoConfiguration {
     private final Log log = LogFactory.getLog(ToolsAutoConfiguration.class);
 
     @Bean
-    public BatchUtil batchUtil(SqlSessionFactory sqlSessionFactory) {
-        return new BatchUtil(sqlSessionFactory);
+    @ConditionalOnBean(SqlSessionTemplate.class)
+    public BatchUpdate batchUtil(SqlSessionTemplate sqlSessionTemplate) {
+        return new BatchUpdate(sqlSessionTemplate);
     }
 
     @Bean

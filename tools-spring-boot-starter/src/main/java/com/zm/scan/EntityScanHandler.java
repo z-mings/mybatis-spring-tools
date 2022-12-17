@@ -3,7 +3,7 @@ package com.zm.scan;
 import com.zm.annotation.EntityHandler;
 import com.zm.annotation.FieldValue;
 import com.zm.plugins.FieldInfo;
-import com.zm.reflect.ReflectUtil;
+import com.zm.util.ReflectUtil;
 import org.apache.ibatis.reflection.Reflector;
 import org.apache.ibatis.reflection.invoker.Invoker;
 import org.springframework.beans.BeansException;

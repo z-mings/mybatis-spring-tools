@@ -7,7 +7,7 @@
     <groupId>com.zm</groupId>
     <artifactId>mybatis-tools</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <modules>
         <module>mybatis-tools-spring</module>
         <module>tools-spring-boot-starter</module>
@@ -18,6 +18,7 @@
         <mybatis-spring.version>2.0.7</mybatis-spring.version>
         <spring.version>5.3.20</spring.version>
         <spring-boot.version>2.6.8</spring-boot.version>
+        <commons-collections4.version>4.3</commons-collections4.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
@@ -58,6 +59,11 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-configuration-processor</artifactId>
                 <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${commons-collections4.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
