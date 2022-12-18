@@ -11,7 +11,6 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
 import org.mybatis.spring.MyBatisExceptionTranslator;
 import org.mybatis.spring.SqlSessionHolder;
-import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.SqlSessionUtils;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -21,8 +20,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-import static org.mybatis.spring.SqlSessionUtils.closeSqlSession;
-import static org.mybatis.spring.SqlSessionUtils.isSqlSessionTransactional;
 
 /**
  * 批量插入或更新的工具类
@@ -37,17 +34,16 @@ public class BatchUpdate {
      */
     private static final int DEFAULT_LIMIT = 1000;
     private final SqlSessionFactory batchSessionFactory;
-    private final SqlSessionTemplate sqlSessionTemplate;
+    private final SqlSessionFactory sqlSessionFactory;
     private final PersistenceExceptionTranslator exceptionTranslator;
 
     private static final ExecutorType batchExecutorType = ExecutorType.BATCH;
     private final Log log = LogFactory.getLog(BatchUpdate.class);
 
-    public BatchUpdate(SqlSessionTemplate sqlSessionTemplate) {
-        SqlSessionFactory sqlSessionFactory = sqlSessionTemplate.getSqlSessionFactory();
+    public BatchUpdate(SqlSessionFactory sqlSessionFactory) {
+        this.sqlSessionFactory = sqlSessionFactory;
         Configuration configuration = sqlSessionFactory.getConfiguration();
         batchSessionFactory = new DefaultSqlSessionFactory(configuration);
-        this.sqlSessionTemplate = sqlSessionTemplate;
         exceptionTranslator = new MyBatisExceptionTranslator(sqlSessionFactory.getConfiguration().getEnvironment().getDataSource(), true);
     }
 
@@ -104,13 +100,13 @@ public class BatchUpdate {
             if (updateSize != list.size()) {
                 log.warn("batchSave批量更新警告——预计更新条数为：" + list.size() + ",实际更新条数为：" + updateSize);
             }
-            if (!isSqlSessionTransactional(sqlSession, batchSessionFactory)) {
+            if (!SqlSessionUtils.isSqlSessionTransactional(sqlSession, batchSessionFactory)) {
                 sqlSession.commit(true);
             }
             return updateSize;
         } finally {
             clearCache();
-            closeSqlSession(sqlSession, batchSessionFactory);
+            SqlSessionUtils.closeSqlSession(sqlSession, batchSessionFactory);
         }
     }
 
@@ -118,7 +114,7 @@ public class BatchUpdate {
      * 情况当前事务中其他执行器的缓存
      */
     private void clearCache() {
-        SqlSessionHolder holder = (SqlSessionHolder) TransactionSynchronizationManager.getResource(sqlSessionTemplate.getSqlSessionFactory());
+        SqlSessionHolder holder = (SqlSessionHolder) TransactionSynchronizationManager.getResource(sqlSessionFactory);
         if (holder != null && holder.isSynchronizedWithTransaction()) {
             SqlSession sqlSession = holder.getSqlSession();
             sqlSession.clearCache();

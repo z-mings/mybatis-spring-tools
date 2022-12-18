@@ -8,8 +8,7 @@ import com.zm.plugins.FieldPlugin;
 import com.zm.scan.EntityScanHandler;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
-import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -29,9 +28,8 @@ public class ToolsAutoConfiguration {
     private final Log log = LogFactory.getLog(ToolsAutoConfiguration.class);
 
     @Bean
-    @ConditionalOnBean(SqlSessionTemplate.class)
-    public BatchUpdate batchUtil(SqlSessionTemplate sqlSessionTemplate) {
-        return new BatchUpdate(sqlSessionTemplate);
+    public BatchUpdate batchUtil(SqlSessionFactory sqlSessionFactory) {
+        return new BatchUpdate(sqlSessionFactory);
     }
 
     @Bean
